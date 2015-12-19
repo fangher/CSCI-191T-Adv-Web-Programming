@@ -45,11 +45,18 @@ func profile(res http.ResponseWriter, req *http.Request, ps httprouter.Params) {
   
 func uploadImage(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	ctx := appengine.NewContext(req)
-	uploadURL, err := imageurl.UploadURL(ctx, nil)
+	uploadPath, err := imageurl.UploadURL(ctx, nil)
 	if err != nil {
 		serveTempls(res, req, "fail.html") 
 	}
 
+func makeImage(req *http.Request, image string) string {
+	return "https://" + req.URL.Host + "/image/" + image
+}
+
+func getImage(res http.ResponseWriter, req *http.Request, ps httprouter.Params) {
+	imageurlstore.Send(res, appengine.imageKey)
+}
 
 }
 
