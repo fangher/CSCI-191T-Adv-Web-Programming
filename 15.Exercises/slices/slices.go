@@ -12,8 +12,8 @@ func main () {
 	thirdSlice[0] = 1
 	thirdSlice[1] = 2
 	thirdSlice[2] = 3
-  thirdSlice[3] = 4
-  thirdSlice[4] = 5
+  	thirdSlice[3] = 4
+  	thirdSlice[4] = 5
 	fmt.Println(thirdSlice)
 	fmt.Println(len(thirdSlice))
 	fmt.Println(cap(thirdSlice))
