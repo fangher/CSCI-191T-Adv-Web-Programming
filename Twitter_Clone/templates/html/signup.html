@@ -1,0 +1,72 @@
+{{template "header"}}
+<link rel="stylesheet" href="public/css/signup.css">
+{{template "header2"}}
+    <form method="POST" action="/api/createuser" id="form-create-user">
+        <i class="fa fa-user fa-5x"></i>
+        <p class="form-field-err" id="form-err"></p>
+        <input id="email" name="email" type="email" placeholder="Enter your email">
+        <p class="form-field-err" id="email-err"></p>
+        <input id="password" name="password" type="password" placeholder="Create your password">
+        <input id="password2" name="password2" type="password" placeholder="Retype your password">
+        <p class="form-field-err" id="password-err"></p>
+        <button id="btn-create-account">Create Account</button>
+    </form>
+    <script>
+        var formUser = document.querySelector('#form-create-user');
+        var email = document.querySelector('#email');
+        var p1 = document.querySelector('#password');
+        var p2 = document.querySelector('#password2');
+        var btnSubmit = document.querySelector('#btn-create-account');
+        var nameErr = document.querySelector('#email-err');
+        var pErr = document.querySelector('#password-err');
+        var formErr = document.querySelector("#form-err");
+        
+        //    email must be unique
+        email.addEventListener('input', function(){
+           console.log(email.value);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/checkemail');
+            xhr.send(email.value);
+            xhr.addEventListener('readystatechange', function(){
+                if (xhr.readyState === 4) {
+                    var item = xhr.responseText;
+                    console.log(item);
+                    if (item == 'true') {
+                        nameErr.textContent = `Email taken - Are you sure you don't have an account?`;
+                    } else {
+                        nameErr.textContent = '';
+                    }
+                }
+            });
+        });
+        
+        //    listen for submit button click
+        formUser.addEventListener('submit', function(e){
+            //check passwords the same & email is unique
+            var err = nameErr.textContent;
+            var ok = validatePasswords();
+            if (!ok || err != '') {
+                formErr.textContent = "There was an error submitting the form.";
+                e.preventDefault();
+                return;
+            }
+        });
+        
+        
+        //    Validate passwords
+        function validatePasswords() {
+            pErr.textContent = '';
+            if (p1.value === '') {
+                pErr.textContent = 'Enter a password.';
+                return false;
+            }
+            if (p1.value !== p2.value) {
+                pErr.textContent = 'Your passwords did not match. Please re-enter your passwords.';
+                p1.value = '';
+                p2.value = '';
+                return false;
+            }
+            return true;
+        };
+    </script>
+{{template "footer"}}
